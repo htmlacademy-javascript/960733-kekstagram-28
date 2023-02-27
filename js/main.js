@@ -25,33 +25,30 @@ const DESCRIPTIONS = [
   'Просто сплю'
 ];
 
+const TOTAL_POSTS = 25;
+
 const getRandomInteger = (min, max) => {
   const rand = min - 0.5 + Math.random() * (max - min + 1);
   return Math.round(rand);
 };
 
-const commentsId = [];
-const postsId = [];
+const getId = () => {
+  let id = 0;
 
-const getUniqueId = (min, max, usedId = []) => {
-  while (true) {
-    const randomId = getRandomInteger(min, max);
-    if (usedId.indexOf(randomId) === -1) {
-      usedId.push(randomId);
-      return randomId;
-    }
-    // Защита от вечного цикла.
-    if (usedId.length === max - min + 1) {
-      return undefined;
-    }
-  }
+  return function () {
+    id += 1;
+    return id;
+  };
 };
+
+const postsId = getId();
+const commentId = getId();
 
 const createComments = () => {
   const comments = [];
   for (let i = 1; i < 6; i++) {
     const comment = {
-      id: getUniqueId(1, 200, commentsId),
+      id: commentId(),
       avatar: `img/avatar-${getRandomInteger(1, 6)}.svg`,
       message: MESSAGES[getRandomInteger(0, MESSAGES.length - 1)],
       name: NAMES[getRandomInteger(0, NAMES.length - 1)]
@@ -62,7 +59,7 @@ const createComments = () => {
 };
 
 const createPost = () => {
-  const recordId = getUniqueId(1, 25, postsId);
+  const recordId = postsId();
   return {
     id: recordId,
     url: `photos/${recordId}.jpg`,
@@ -72,4 +69,5 @@ const createPost = () => {
   };
 };
 
-const keksogramPosts = Array.from({length: 25}, createPost);
+const keksogramPosts = Array.from({length: TOTAL_POSTS}, createPost);
+export {keksogramPosts};
