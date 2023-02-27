@@ -35,7 +35,7 @@ const getRandomInteger = (min, max) => {
 const getId = () => {
   let id = 0;
 
-  return function () {
+  return () => {
     id += 1;
     return id;
   };
