@@ -20,3 +20,8 @@ const customPad = (source, count, addition) => {
   }
   return sample.slice(0, preffixLength - addition.length) + addition + source;
 };
+
+export {fitForLength};
+export {polindrom};
+export {onlyDigits};
+export {customPad};
