@@ -61,4 +61,6 @@ const createPost = () => {
   };
 };
 
-export const createPosts = () => Array.from({length: TOTAL_POSTS}, createPost);
+const createPosts = () => Array.from({length: TOTAL_POSTS}, createPost);
+
+export {createPosts};
