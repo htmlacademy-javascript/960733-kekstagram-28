@@ -33,11 +33,8 @@ const MIN_LIKES_COUNT = 15;
 const MAX_LIKES_COUNT = 200;
 
 const getId = () => {
-  let id = 0;
-  return () => {
-    id += 1;
-    return id;
-  };
+  let id = 1;
+  return () => id++;
 };
 
 const postsId = getId();
