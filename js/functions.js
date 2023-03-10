@@ -21,7 +21,19 @@ const customPad = (source, count, addition) => {
   return sample.slice(0, preffixLength - addition.length) + addition + source;
 };
 
+const numDecline = (num, nominative, genitiveSingular, genitivePlural) => {
+  let lastDigit = Number(num.toString().slice(-2));
+  lastDigit = lastDigit > 20 ? Number(lastDigit.toString().slice(-1)) : lastDigit;
+  if (lastDigit === 1) {
+    return nominative;
+  } else if (lastDigit > 4 || lastDigit === 0) {
+    return genitivePlural;
+  }
+  return genitiveSingular;
+};
+
 export {fitForLength};
 export {polindrom};
 export {onlyDigits};
 export {customPad};
+export {numDecline};

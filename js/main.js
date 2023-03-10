@@ -1,5 +1,5 @@
 import {createPosts} from './data.js';
+import {renderedPosts} from './rendering.js';
 
-const keksogramPosts = createPosts();
-
-export {keksogramPosts};
+export {createPosts};
+export {renderedPosts};
