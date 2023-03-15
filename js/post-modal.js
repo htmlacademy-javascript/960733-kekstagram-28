@@ -30,7 +30,7 @@ function closePostModal () {
 
 const isSmallPostImage = (element) => element.matches('.picture');
 
-const openPostModal = (url, likes, description, comments) => {
+const openPostModal = ({url, likes, description, comments}) => {
   postImage.src = url;
   postLikesCount.textContent = likes;
   postCommentsCount.textContent = comments.length;
@@ -87,7 +87,7 @@ const onSmallImageClick = (sourceElement, posts) => {
   if (isSmallPostImage(elementParent)) {
     const postId = elementParent.querySelector('.picture__id').textContent;
     const postData = posts[postId - 1];
-    openPostModal(postData.url, postData.likes, postData.description, postData.comments);
+    openPostModal(postData);
   }
 };
 
