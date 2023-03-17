@@ -7,11 +7,52 @@ const postCommentsCount = fullPostDialog.querySelector('.comments-count');
 const postCommentsContainer = fullPostDialog.querySelector('.social__comments');
 const postDescription = fullPostDialog.querySelector('.social__caption');
 const closeButton = fullPostDialog.querySelector('.big-picture__cancel');
-
 const pageBody = document.querySelector('body');
-
 const postCommentsCounter = fullPostDialog.querySelector('.social__comment-count');
 const postCommentsLoader = fullPostDialog.querySelector('.comments-loader');
+
+let showMoreComments = undefined;
+const COMMENTS_TO_SHOW = 5;
+
+const showComments = (comments) => {
+  let commentsQuantity = 0;
+
+  return () => {
+    let avialableComments = commentsQuantity + COMMENTS_TO_SHOW;
+    avialableComments = avialableComments > comments.length ? avialableComments = comments.length : avialableComments;
+
+    for (let i = commentsQuantity; i < avialableComments; i++) {
+
+      const newCommentImage = document.createElement('img');
+      newCommentImage.src = comments[i].avatar;
+      newCommentImage.alt = comments[i].name;
+      newCommentImage.width = 35;
+      newCommentImage.height = 35;
+      newCommentImage.classList.add('social__picture');
+
+      const newCommentMessage = document.createElement('p');
+      newCommentMessage.textContent = comments[i].message;
+      newCommentMessage.classList.add('social__text');
+
+      const newComment = document.createElement('li');
+      newComment.appendChild(newCommentImage);
+      newComment.appendChild(newCommentMessage);
+      newComment.classList.add('social__comment');
+
+      postCommentsContainer.appendChild(newComment);
+    }
+
+    commentsQuantity = avialableComments;
+
+    // Выведем число отображенных комментариев.
+    postCommentsCounter.textContent = `${commentsQuantity} из ${comments.length} комментариев`;
+
+    // Если выведены все комментарии, спрячем кнопку "загрузить ещё".
+    if (commentsQuantity === comments.length) {
+      postCommentsLoader.classList.add('hidden');
+    }
+  };
+};
 
 const onDocumentKeydown = (evt) => {
   if (isEscapeKey(evt)) {
@@ -21,11 +62,16 @@ const onDocumentKeydown = (evt) => {
 
 function closePostModal () {
   pageBody.classList.remove('modal-open');
-  fullPostDialog.classList.add('hidden');
 
   // Удалим обработчики закрытия модального окна.
   document.removeEventListener('keydown', onDocumentKeydown);
   closeButton.removeEventListener('click', closePostModal);
+
+  // Удалим подписку на клик по "загрузить ещё комментарии", вернем отображение блока.
+  postCommentsLoader.removeEventListener('click', showMoreComments);
+  postCommentsLoader.classList.remove('hidden');
+
+  fullPostDialog.classList.add('hidden');
 }
 
 const isSmallPostImage = (element) => element.matches('.picture');
@@ -42,29 +88,8 @@ const openPostModal = ({url, likes, description, comments}) => {
   }
 
   // Вывод комментариев.
-  comments.forEach((element) => {
-    const newCommentImage = document.createElement('img');
-    newCommentImage.src = element.avatar;
-    newCommentImage.alt = element.name;
-    newCommentImage.width = 35;
-    newCommentImage.height = 35;
-    newCommentImage.classList.add('social__picture');
-
-    const newCommentMessage = document.createElement('p');
-    newCommentMessage.textContent = element.message;
-    newCommentMessage.classList.add('social__text');
-
-    const newComment = document.createElement('li');
-    newComment.appendChild(newCommentImage);
-    newComment.appendChild(newCommentMessage);
-    newComment.classList.add('social__comment');
-
-    postCommentsContainer.appendChild(newComment);
-  });
-
-  // Спрячем загрузку новых комментариев
-  postCommentsCounter.classList.add('hidden');
-  postCommentsLoader.classList.add('hidden');
+  showMoreComments = showComments(comments);
+  showMoreComments();
 
   // Исключим прокрутку позади модального окна
   pageBody.classList.add('modal-open');
@@ -75,10 +100,11 @@ const openPostModal = ({url, likes, description, comments}) => {
   // Подписка на событие нажатия клавиши, чтобы закрыть по ESC.
   document.addEventListener('keydown', onDocumentKeydown);
 
-  // Подписка на клик мышью.
-  closeButton.addEventListener('click', () => {
-    closePostModal();
-  });
+  // Подписка на клик мышью для закрытия окна.
+  closeButton.addEventListener('click', closePostModal);
+
+  // Подписка на клик по "загрузить ещё комментарии"
+  postCommentsLoader.addEventListener('click', showMoreComments);
 };
 
 const onSmallImageClick = (sourceElement, posts) => {
@@ -89,6 +115,7 @@ const onSmallImageClick = (sourceElement, posts) => {
     const postData = posts[postId - 1];
     openPostModal(postData);
   }
+  sourceElement.preventDefault();
 };
 
 export {onSmallImageClick};
