@@ -27,7 +27,8 @@ const DESCRIPTIONS = [
   'Просто сплю'
 ];
 
-const TOTAL_POST_COMMENTS = 6;
+const TOTAL_POST_COMMENTS = 18;
+const TOTAL_DIFFERENT_AVATARS = 6;
 const TOTAL_POSTS = 25;
 const MIN_LIKES_COUNT = 15;
 const MAX_LIKES_COUNT = 200;
@@ -42,7 +43,7 @@ const commentId = getId();
 
 const createComment = () => ({
   id: commentId(),
-  avatar: `img/avatar-${getRandomInteger(1, TOTAL_POST_COMMENTS)}.svg`,
+  avatar: `img/avatar-${getRandomInteger(1, TOTAL_DIFFERENT_AVATARS)}.svg`,
   message: MESSAGES[getRandomInteger(0, MESSAGES.length - 1)],
   name: NAMES[getRandomInteger(0, NAMES.length - 1)]
 });
