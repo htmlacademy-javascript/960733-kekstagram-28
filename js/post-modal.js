@@ -11,47 +11,44 @@ const pageBody = document.querySelector('body');
 const postCommentsCounter = fullPostDialog.querySelector('.social__comment-count');
 const postCommentsLoader = fullPostDialog.querySelector('.comments-loader');
 
-let showMoreComments = undefined;
+let postComments = [];
+let commentsQuantity = 0;
 const COMMENTS_TO_SHOW = 5;
 
-const showComments = (comments) => {
-  let commentsQuantity = 0;
+const showMoreComments = () => {
+  let avialableComments = commentsQuantity + COMMENTS_TO_SHOW;
+  avialableComments = avialableComments > postComments.length ? avialableComments = postComments.length : avialableComments;
 
-  return () => {
-    let avialableComments = commentsQuantity + COMMENTS_TO_SHOW;
-    avialableComments = avialableComments > comments.length ? avialableComments = comments.length : avialableComments;
+  for (let i = commentsQuantity; i < avialableComments; i++) {
 
-    for (let i = commentsQuantity; i < avialableComments; i++) {
+    const newCommentImage = document.createElement('img');
+    newCommentImage.src = postComments[i].avatar;
+    newCommentImage.alt = postComments[i].name;
+    newCommentImage.width = 35;
+    newCommentImage.height = 35;
+    newCommentImage.classList.add('social__picture');
 
-      const newCommentImage = document.createElement('img');
-      newCommentImage.src = comments[i].avatar;
-      newCommentImage.alt = comments[i].name;
-      newCommentImage.width = 35;
-      newCommentImage.height = 35;
-      newCommentImage.classList.add('social__picture');
+    const newCommentMessage = document.createElement('p');
+    newCommentMessage.textContent = postComments[i].message;
+    newCommentMessage.classList.add('social__text');
 
-      const newCommentMessage = document.createElement('p');
-      newCommentMessage.textContent = comments[i].message;
-      newCommentMessage.classList.add('social__text');
+    const newComment = document.createElement('li');
+    newComment.appendChild(newCommentImage);
+    newComment.appendChild(newCommentMessage);
+    newComment.classList.add('social__comment');
 
-      const newComment = document.createElement('li');
-      newComment.appendChild(newCommentImage);
-      newComment.appendChild(newCommentMessage);
-      newComment.classList.add('social__comment');
+    postCommentsContainer.appendChild(newComment);
+  }
 
-      postCommentsContainer.appendChild(newComment);
-    }
+  commentsQuantity = avialableComments;
 
-    commentsQuantity = avialableComments;
+  // Выведем число отображенных комментариев.
+  postCommentsCounter.textContent = `${commentsQuantity} из ${postComments.length} комментариев`;
 
-    // Выведем число отображенных комментариев.
-    postCommentsCounter.textContent = `${commentsQuantity} из ${comments.length} комментариев`;
-
-    // Если выведены все комментарии, спрячем кнопку "загрузить ещё".
-    if (commentsQuantity === comments.length) {
-      postCommentsLoader.classList.add('hidden');
-    }
-  };
+  // Если выведены все комментарии, спрячем кнопку "загрузить ещё".
+  if (commentsQuantity === postComments.length) {
+    postCommentsLoader.classList.add('hidden');
+  }
 };
 
 const onDocumentKeydown = (evt) => {
@@ -88,7 +85,8 @@ const openPostModal = ({url, likes, description, comments}) => {
   }
 
   // Вывод комментариев.
-  showMoreComments = showComments(comments);
+  postComments = comments;
+  commentsQuantity = 0;
   showMoreComments();
 
   // Исключим прокрутку позади модального окна
