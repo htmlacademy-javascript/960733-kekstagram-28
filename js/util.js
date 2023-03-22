@@ -4,3 +4,5 @@ export const getRandomInteger = (min, max) => {
 };
 
 export const isEscapeKey = (evt) => evt.key === 'Escape';
+
+export const cleanStringDoubleSpaces = (str) => str.replace(/\s{2,}/g, ' ');
