@@ -1,5 +1,7 @@
 import {isEscapeKey} from './util.js';
 
+const COMMENTS_TO_SHOW = 5;
+
 const fullPostDialog = document.querySelector('.big-picture');
 const postImage = fullPostDialog.querySelector('.big-picture__img').querySelector('img');
 const postLikesCount = fullPostDialog.querySelector('.likes-count');
@@ -13,7 +15,6 @@ const postCommentsLoader = fullPostDialog.querySelector('.comments-loader');
 
 let postComments = [];
 let commentsQuantity = 0;
-const COMMENTS_TO_SHOW = 5;
 
 const showMoreComments = () => {
   let avialableComments = commentsQuantity + COMMENTS_TO_SHOW;
@@ -108,8 +109,12 @@ const openPostModal = ({url, likes, description, comments}) => {
 const onSmallImageClick = (sourceElement, posts) => {
   const elementParent = sourceElement.closest('a');
 
+  if (!elementParent) {
+    return;
+  }
+
   if (isSmallPostImage(elementParent)) {
-    const postId = elementParent.querySelector('.picture__id').textContent;
+    const postId = elementParent.dataset.pictureId;
     const postData = posts[postId - 1];
     openPostModal(postData);
   }
