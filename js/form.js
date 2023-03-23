@@ -1,4 +1,6 @@
 import {isEscapeKey, cleanStringDoubleSpaces} from './util.js';
+import {onIncreaseScaleClick, onDecreaseScaleClick, setDefaultScale} from './scaling.js';
+import {onEffectChange} from './effects.js';
 
 const TAGS_VALIDATE_ERROR_TEXT = 'Неверно указаны хэш-теги';
 const MAX_TAGS_QUANTITY = 5;
@@ -11,6 +13,9 @@ const pageBody = document.querySelector('body');
 const closeButton = imageEditorDialog.querySelector('.img-upload__cancel');
 const hashTags = imageEditorDialog.querySelector('.text__hashtags');
 const comment = imageEditorDialog.querySelector('.text__description');
+const decreaseScaleElement = imageEditorDialog.querySelector('.scale__control--smaller');
+const increaseScaleElement = imageEditorDialog.querySelector('.scale__control--bigger');
+const effectsElement = imageEditorDialog.querySelector('.effects');
 
 const pristine = new Pristine(form, {
   classTo: 'img-upload__field-wrapper',
@@ -58,6 +63,9 @@ function closeImageEditor () {
   closeButton.removeEventListener('click', closeImageEditor);
   document.removeEventListener('keydown', onDocumentKeydown);
   form.removeEventListener('submit', onFormSubmit);
+  increaseScaleElement.removeEventListener('click', onIncreaseScaleClick);
+  decreaseScaleElement.removeEventListener('click', onDecreaseScaleClick);
+  effectsElement.removeEventListener('change', onEffectChange);
 
   form.reset();
 }
@@ -71,7 +79,13 @@ const openImageEditor = () => {
   closeButton.addEventListener('click', closeImageEditor);
   // Закрытие формы на ESC.
   document.addEventListener('keydown', onDocumentKeydown);
-
+  // Масштабирование по умолчанию.
+  setDefaultScale();
+  // Обработчики масштабирования изображения.
+  increaseScaleElement.addEventListener('click', onIncreaseScaleClick);
+  decreaseScaleElement.addEventListener('click', onDecreaseScaleClick);
+  // Обработчик наложения эффекта на изображение.
+  effectsElement.addEventListener('change', onEffectChange);
   // Добавим валидацию перед отправкой формы.
   form.addEventListener('submit', onFormSubmit);
 };
