@@ -1,18 +1,17 @@
-import {createPosts} from './data.js';
 import {onSmallImageClick} from './post-modal.js';
 import './form.js';
 
-const renderPosts = () => {
+const ERROR_SHOW_TIME = 7000;
+
+const renderPosts = (posts) => {
   const picturesElement = document.querySelector('.pictures');
   const pictureTemplate = document.querySelector('#picture')
     .content
     .querySelector('.picture');
 
-  const newPosts = createPosts();
-
   const postsFragment = document.createDocumentFragment();
 
-  newPosts.forEach(({id, url, likes, comments}) => {
+  posts.forEach(({id, url, likes, comments}) => {
     const newElement = pictureTemplate.cloneNode(true);
     newElement.querySelector('.picture__img').src = url;
     newElement.querySelector('.picture__likes').textContent = likes;
@@ -27,8 +26,29 @@ const renderPosts = () => {
   picturesElement.appendChild(postsFragment);
 
   picturesElement.addEventListener('click', (evt) => {
-    onSmallImageClick(evt.target, newPosts);
+    onSmallImageClick(evt.target, posts);
   });
 };
 
+const showConnectionError = (errorDescription) => {
+  const errorContainer = document.createElement('div');
+  errorContainer.style.zIndex = '100';
+  errorContainer.style.position = 'absolute';
+  errorContainer.style.left = '0';
+  errorContainer.style.top = '0';
+  errorContainer.style.right = '0';
+  errorContainer.style.padding = '10px 3px';
+  errorContainer.style.fontSize = '30px';
+  errorContainer.style.textAlign = 'center';
+  errorContainer.style.backgroundColor = 'red';
+  errorContainer.textContent = `Ошибка получения данных. ${errorDescription}`;
+
+  document.body.append(errorContainer);
+
+  setTimeout(() => {
+    errorContainer.remove();
+  }, ERROR_SHOW_TIME);
+};
+
 export {renderPosts};
+export {showConnectionError};
