@@ -1,6 +1,8 @@
 import {onSmallImageClick} from './post-modal.js';
+import {sendRequest} from './requests.js';
 import './form.js';
 
+const SOURCE_DATA_URL = 'https://28.javascript.pages.academy/kekstagram/data';
 const ERROR_SHOW_TIME = 7000;
 
 const renderPosts = (posts) => {
@@ -50,5 +52,8 @@ const showConnectionError = (errorDescription) => {
   }, ERROR_SHOW_TIME);
 };
 
-export {renderPosts};
-export {showConnectionError};
+const loadPosts = () => {
+  sendRequest(SOURCE_DATA_URL, renderPosts, showConnectionError);
+};
+
+export {loadPosts};
