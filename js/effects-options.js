@@ -40,7 +40,7 @@ const EFFECTS_OPTIONS = {
     },
     start: 100,
     step: 1,
-    unit: '',
+    unit: '%',
     connect: 'lower'
   },
   phobos: {

@@ -36,8 +36,15 @@ const onEffectChange = (evt) => {
   sliderElement.noUiSlider.updateOptions(choosenOption);
 };
 
+const setDefaultEffect = () => {
+  choosenOption = EFFECTS_OPTIONS.none;
+  sliderElement.noUiSlider.updateOptions(choosenOption);
+  hideSlider();
+};
+
 noUiSlider.create(sliderElement, choosenOption);
 sliderElement.noUiSlider.on('update', OnSliderUpdate);
 hideSlider();
 
 export {onEffectChange};
+export {setDefaultEffect};

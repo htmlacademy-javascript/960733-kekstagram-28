@@ -115,7 +115,7 @@ const onSmallImageClick = (sourceElement, posts) => {
 
   if (isSmallPostImage(elementParent)) {
     const postId = elementParent.dataset.pictureId;
-    const postData = posts[postId - 1];
+    const postData = posts[postId];
     openPostModal(postData);
   }
   sourceElement.preventDefault();
