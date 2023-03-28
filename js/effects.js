@@ -37,7 +37,9 @@ const onEffectChange = (evt) => {
 };
 
 const setDefaultEffect = () => {
-  sliderElement.noUiSlider.updateOptions(EFFECTS_OPTIONS.none);
+  choosenOption = EFFECTS_OPTIONS.none;
+  sliderElement.noUiSlider.updateOptions(choosenOption);
+  hideSlider();
 };
 
 noUiSlider.create(sliderElement, choosenOption);
