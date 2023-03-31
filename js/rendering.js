@@ -1,6 +1,8 @@
 import {onSmallImageClick} from './post-modal.js';
 import {sendRequest} from './requests.js';
 import './form.js';
+import {setFilterClick, filterPosts} from './filters.js';
+import {debounce} from './util.js';
 
 const SOURCE_DATA_URL = 'https://28.javascript.pages.academy/kekstagram/data';
 const ERROR_SHOW_TIME = 7000;
@@ -11,9 +13,14 @@ const renderPosts = (posts) => {
     .content
     .querySelector('.picture');
 
+  // Удалим все существующие посты.
+  const currentPosts = document.querySelectorAll('.picture');
+  currentPosts.forEach((post) => {
+    picturesElement.removeChild(post);
+  });
+  const filteredPosts = filterPosts(posts);
   const postsFragment = document.createDocumentFragment();
-
-  posts.forEach(({id, url, likes, comments}) => {
+  filteredPosts.forEach(({id, url, likes, comments}) => {
     const newElement = pictureTemplate.cloneNode(true);
     newElement.querySelector('.picture__img').src = url;
     newElement.querySelector('.picture__likes').textContent = likes;
@@ -52,8 +59,13 @@ const showConnectionError = (errorDescription) => {
   }, ERROR_SHOW_TIME);
 };
 
+const showPosts = (posts) => {
+  renderPosts(posts);
+  setFilterClick(debounce(() => renderPosts(posts)));
+};
+
 const loadPosts = () => {
-  sendRequest(SOURCE_DATA_URL, renderPosts, showConnectionError);
+  sendRequest(SOURCE_DATA_URL, showPosts, showConnectionError);
 };
 
 export {loadPosts};
