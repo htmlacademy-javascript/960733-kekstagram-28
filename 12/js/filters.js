@@ -14,18 +14,9 @@ let currentFiler = Filters.DEFAULT;
 // Отобразим блок с фильтрами
 filtersContainer.classList.remove('img-filters--inactive');
 
-const getFilterByValue = (filterValue) => {
-  for (const filter in Filters) {
-    if (Filters[filter] === filterValue) {
-      return Filters[filter];
-    }
-  }
-  return undefined;
-};
-
 const setFilterClick = (cb) => {
   filtersFormElement.addEventListener('click', (evt) => {
-    const newFilter = getFilterByValue(evt.target.id);
+    const newFilter = evt.target.id;
     if (!newFilter || newFilter === currentFiler) {
       return;
     }
