@@ -7,6 +7,7 @@ const TAGS_VALIDATE_ERROR_TEXT = 'Неверно указаны хэш-теги'
 const MAX_TAGS_QUANTITY = 5;
 const TAG_VALID_SYMBOLS = /^#[a-zа-яё0-9]{1,19}$/i;
 const SEND_DATA_URL = 'https://28.javascript.pages.academy/kekstagram';
+const FILE_TYPES = ['jpg', 'jpeg', 'png'];
 
 const form = document.querySelector('.img-upload__form');
 const uploadFile = document.querySelector('#upload-file');
@@ -203,6 +204,22 @@ const openImageEditor = () => {
   form.addEventListener('submit', onFormSubmit);
 };
 
-const OnFileUploadChange = () => openImageEditor();
+const OnFileUploadChange = () => {
+  const fileInputElement = document.querySelector('.img-upload__start input[type=file]');
+  const previewImageElement = document.querySelector('.img-upload__preview img');
+
+  const file = fileInputElement.files[0];
+  const fileName = file.name.toLowerCase();
+  const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
+  if (matches) {
+    previewImageElement.src = URL.createObjectURL(file);
+
+    const filterImagesPreview = document.querySelectorAll('.effects__preview');
+    filterImagesPreview.forEach((filterImage) => {
+      filterImage.style.backgroundImage = `url(${previewImageElement.src})`;
+    });
+    openImageEditor();
+  }
+};
 
 uploadFile.addEventListener('change', OnFileUploadChange);
