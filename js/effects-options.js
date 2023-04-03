@@ -1,5 +1,5 @@
-const EFFECTS_OPTIONS = {
-  none: {
+const Options = {
+  NONE: {
     filter: 'none',
     range: {
       min: 0,
@@ -10,7 +10,7 @@ const EFFECTS_OPTIONS = {
     unit: '',
     connect: 'lower'
   },
-  chrome: {
+  CHROME: {
     filter: 'grayscale',
     range: {
       min: 0,
@@ -21,7 +21,7 @@ const EFFECTS_OPTIONS = {
     unit: '',
     connect: 'lower'
   },
-  sepia: {
+  SEPIA: {
     filter: 'sepia',
     range: {
       min: 0,
@@ -32,7 +32,7 @@ const EFFECTS_OPTIONS = {
     unit: '',
     connect: 'lower'
   },
-  marvin: {
+  MARVIN: {
     filter: 'invert',
     range: {
       min: 0,
@@ -43,7 +43,7 @@ const EFFECTS_OPTIONS = {
     unit: '%',
     connect: 'lower'
   },
-  phobos: {
+  PHOBOS: {
     filter: 'blur',
     range: {
       min: 0,
@@ -54,7 +54,7 @@ const EFFECTS_OPTIONS = {
     unit: 'px',
     connect: 'lower'
   },
-  heat: {
+  HEAT: {
     filter: 'brightness',
     range: {
       min: 1,
@@ -67,4 +67,4 @@ const EFFECTS_OPTIONS = {
   }
 };
 
-export {EFFECTS_OPTIONS};
+export {Options};

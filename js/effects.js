@@ -1,23 +1,27 @@
-import {EFFECTS_OPTIONS} from './effects-options.js';
+import {Options} from './effects-options.js';
 
 const imagePreviewElement = document.querySelector('.img-upload__preview img');
 const sliderContainerElement = document.querySelector('.img-upload__effect-level');
 const sliderElement = document.querySelector('.effect-level__slider');
 const effectValueElement = document.querySelector('.effect-level__value');
 
-let choosenOption = EFFECTS_OPTIONS.none;
+let choosenOption = Options.NONE;
 
 const OnSliderUpdate = () => {
   const sliderValue = sliderElement.noUiSlider.get();
 
-  imagePreviewElement.style.filter = choosenOption === EFFECTS_OPTIONS.none
+  imagePreviewElement.style.filter = choosenOption === Options.NONE
     ? imagePreviewElement.style.filter = choosenOption.filter
     : `${choosenOption.filter}(${sliderValue}${choosenOption.unit})`;
 
   effectValueElement.value = sliderValue;
 };
 
-const hideSlider = () => {
+const changeSliderVisibility = (visibility) => {
+  if (visibility) {
+    sliderContainerElement.classList.remove('hidden');
+    return;
+  }
   sliderContainerElement.classList.add('hidden');
 };
 
@@ -26,25 +30,21 @@ const onEffectChange = (evt) => {
     return;
   }
   const targetValue = evt.target.value;
-  choosenOption = EFFECTS_OPTIONS[targetValue];
+  choosenOption = Options[targetValue.toUpperCase()];
   imagePreviewElement.className = `effects__preview--${targetValue}`;
-  if (choosenOption === EFFECTS_OPTIONS.none) {
-    hideSlider();
-  } else {
-    sliderContainerElement.classList.remove('hidden');
-  }
+  changeSliderVisibility(choosenOption !== Options.NONE);
   sliderElement.noUiSlider.updateOptions(choosenOption);
 };
 
 const setDefaultEffect = () => {
-  choosenOption = EFFECTS_OPTIONS.none;
+  choosenOption = Options.NONE;
   sliderElement.noUiSlider.updateOptions(choosenOption);
-  hideSlider();
+  changeSliderVisibility(false);
 };
 
 noUiSlider.create(sliderElement, choosenOption);
 sliderElement.noUiSlider.on('update', OnSliderUpdate);
-hideSlider();
+changeSliderVisibility(false);
 
 export {onEffectChange};
 export {setDefaultEffect};
