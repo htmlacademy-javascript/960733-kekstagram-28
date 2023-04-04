@@ -44,7 +44,7 @@ const showMoreComments = () => {
   commentsQuantity = avialableComments;
 
   // Выведем число отображенных комментариев.
-  postCommentsCounter.textContent = `${commentsQuantity} из ${postComments.length} комментариев`;
+  postCommentsCounter.innerHTML = `${commentsQuantity} из <span class="comments-count">${postComments.length}</span> комментариев`;
 
   // Если выведены все комментарии, спрячем кнопку "загрузить ещё".
   if (commentsQuantity === postComments.length) {
@@ -112,7 +112,6 @@ const onSmallImageClick = (sourceElement, posts) => {
   if (!elementParent) {
     return;
   }
-
   if (isSmallPostImage(elementParent)) {
     const postId = elementParent.dataset.pictureId;
     const postData = posts[postId];
