@@ -43,10 +43,8 @@ const showMoreComments = () => {
 
   commentsQuantity = avialableComments;
 
-  // Выведем число отображенных комментариев.
   postCommentsCounter.innerHTML = `${commentsQuantity} из <span class="comments-count">${postComments.length}</span> комментариев`;
 
-  // Если выведены все комментарии, спрячем кнопку "загрузить ещё".
   if (commentsQuantity === postComments.length) {
     postCommentsLoader.classList.add('hidden');
   }
@@ -61,11 +59,9 @@ const onDocumentKeydown = (evt) => {
 function closePostModal () {
   pageBody.classList.remove('modal-open');
 
-  // Удалим обработчики закрытия модального окна.
   document.removeEventListener('keydown', onDocumentKeydown);
   closeButton.removeEventListener('click', closePostModal);
 
-  // Удалим подписку на клик по "загрузить ещё комментарии", вернем отображение блока.
   postCommentsLoader.removeEventListener('click', showMoreComments);
   postCommentsLoader.classList.remove('hidden');
 
@@ -80,34 +76,24 @@ const openPostModal = ({url, likes, description, comments}) => {
   postCommentsCount.textContent = comments.length;
   postDescription.textContent = description;
 
-  // Удалим все существующие комментарии.
   while (postCommentsContainer.firstChild) {
     postCommentsContainer.removeChild(postCommentsContainer.firstChild);
   }
 
-  // Вывод комментариев.
   postComments = comments;
   commentsQuantity = 0;
   showMoreComments();
 
-  // Исключим прокрутку позади модального окна
   pageBody.classList.add('modal-open');
-
-  // Отображаем модальное окно.
   fullPostDialog.classList.remove('hidden');
 
-  // Подписка на событие нажатия клавиши, чтобы закрыть по ESC.
   document.addEventListener('keydown', onDocumentKeydown);
-
-  // Подписка на клик мышью для закрытия окна.
   closeButton.addEventListener('click', closePostModal);
-
-  // Подписка на клик по "загрузить ещё комментарии"
   postCommentsLoader.addEventListener('click', showMoreComments);
 };
 
-const onSmallImageClick = (sourceElement, posts) => {
-  const elementParent = sourceElement.closest('a');
+const onSmallImageClick = (evt, posts) => {
+  const elementParent = evt.target.closest('a');
 
   if (!elementParent) {
     return;
@@ -117,7 +103,7 @@ const onSmallImageClick = (sourceElement, posts) => {
     const postData = posts[postId];
     openPostModal(postData);
   }
-  sourceElement.preventDefault();
+  evt.preventDefault();
 };
 
 export {onSmallImageClick};

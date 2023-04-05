@@ -1,17 +1,15 @@
+const MAX_RANDOM_IMAGES = 10;
+const ACTIVE_BUTTON_STYLE = 'img-filters__button--active';
 const Filters = {
   DEFAULT: 'filter-default',
   RANDOM: 'filter-random',
   DISCUSSED: 'filter-discussed'
 };
-const MAX_RANDOM_IMAGES = 10;
-const activeButtonStyle = 'img-filters__button--active';
 
 const filtersContainer = document.querySelector('.img-filters');
 const filtersFormElement = document.querySelector('.img-filters__form');
 
 let currentFiler = Filters.DEFAULT;
-
-// Отобразим блок с фильтрами
 filtersContainer.classList.remove('img-filters--inactive');
 
 const setFilterClick = (cb) => {
@@ -20,9 +18,9 @@ const setFilterClick = (cb) => {
     if (!newFilter || newFilter === currentFiler) {
       return;
     }
-    const activeButtonElement = document.querySelector(`.${activeButtonStyle}`);
-    activeButtonElement.classList.remove(activeButtonStyle);
-    evt.target.classList.add(activeButtonStyle);
+    const activeButtonElement = document.querySelector(`.${ACTIVE_BUTTON_STYLE}`);
+    activeButtonElement.classList.remove(ACTIVE_BUTTON_STYLE);
+    evt.target.classList.add(ACTIVE_BUTTON_STYLE);
     currentFiler = newFilter;
     cb();
   });

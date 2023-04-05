@@ -13,7 +13,6 @@ const renderPosts = (posts) => {
     .content
     .querySelector('.picture');
 
-  // Удалим все существующие посты.
   const currentPosts = document.querySelectorAll('.picture');
   currentPosts.forEach((post) => {
     picturesElement.removeChild(post);
@@ -25,8 +24,6 @@ const renderPosts = (posts) => {
     newElement.querySelector('.picture__img').src = url;
     newElement.querySelector('.picture__likes').textContent = likes;
     newElement.querySelector('.picture__comments').textContent = comments.length;
-
-    // Запишем идентификатор записи в dataset.
     newElement.dataset.pictureId = id;
 
     postsFragment.appendChild(newElement);
@@ -35,7 +32,7 @@ const renderPosts = (posts) => {
   picturesElement.appendChild(postsFragment);
 
   picturesElement.addEventListener('click', (evt) => {
-    onSmallImageClick(evt.target, posts);
+    onSmallImageClick(evt, posts);
   });
 };
 

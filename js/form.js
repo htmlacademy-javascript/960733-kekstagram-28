@@ -1,5 +1,5 @@
 import {isEscapeKey, cleanStringDoubleSpaces} from './util.js';
-import {onIncreaseScaleClick, onDecreaseScaleClick, setDefaultScale} from './scaling.js';
+import {onChangeScaleClick, setDefaultScale} from './scaling.js';
 import {onEffectChange, setDefaultEffect} from './effects.js';
 import {sendRequest} from './requests.js';
 
@@ -16,8 +16,7 @@ const pageBody = document.querySelector('body');
 const closeButton = imageEditorDialog.querySelector('.img-upload__cancel');
 const hashTags = imageEditorDialog.querySelector('.text__hashtags');
 const comment = imageEditorDialog.querySelector('.text__description');
-const decreaseScaleElement = imageEditorDialog.querySelector('.scale__control--smaller');
-const increaseScaleElement = imageEditorDialog.querySelector('.scale__control--bigger');
+const changeScaleElement = imageEditorDialog.querySelector('.img-upload__scale');
 const effectsElement = imageEditorDialog.querySelector('.effects');
 const submitButton = imageEditorDialog.querySelector('.img-upload__submit');
 let connectionErrorShown = false;
@@ -102,7 +101,6 @@ const changeTryAgainButtonAccessibility = (newValue) => {
 };
 
 const onTryAgainButtonClick = () => {
-  // На время повторной попытки заблокируем кнопку.
   changeTryAgainButtonAccessibility(true);
   saveNewPost();
 };
@@ -113,15 +111,12 @@ const onOkButtonClick = () => {
 };
 
 const showConnectionError = () => {
-  // Уведомление с ошибкой отправки могло быть уже выведено ранее.
   if (connectionErrorShown) {
     changeTryAgainButtonAccessibility(false);
     return;
   }
   connectionErrorShown = true;
-  // Вернем доступность кнопке для отправки данных основного диалога.
   submitButton.disabled = false;
-  // Уведомление об ошибке.
   const errorTemplate = document.querySelector('#error')
     .content
     .querySelector('.error');
@@ -129,7 +124,6 @@ const showConnectionError = () => {
   const errorElement = errorTemplate.cloneNode(true);
   pageBody.appendChild(errorElement);
 
-  // Добавим обработчики закрытия окна
   const tryAgainButton = errorElement.querySelector('.error__button');
   tryAgainButton.addEventListener('click', onTryAgainButtonClick);
   document.addEventListener('click', onMouseClick);
@@ -137,14 +131,12 @@ const showConnectionError = () => {
 
 const showSuccessMessage = () => {
   sendDataSucessShown = true;
-  // Уведомление об успехе отправки данных.
   const sucсessTemplate = document.querySelector('#success')
     .content
     .querySelector('.success');
 
   const sucсessElement = sucсessTemplate.cloneNode(true);
   pageBody.appendChild(sucсessElement);
-  // Добавим обработчики закрытия окна
   const okButton = sucсessElement.querySelector('.success__button');
   okButton.addEventListener('click', onOkButtonClick);
   document.addEventListener('click', onMouseClick);
@@ -174,33 +166,25 @@ function closeImageEditor () {
   closeButton.removeEventListener('click', closeImageEditor);
   document.removeEventListener('keydown', onDocumentKeydown);
   form.removeEventListener('submit', onFormSubmit);
-  increaseScaleElement.removeEventListener('click', onIncreaseScaleClick);
-  decreaseScaleElement.removeEventListener('click', onDecreaseScaleClick);
+  changeScaleElement.removeEventListener('click', onChangeScaleClick);
   effectsElement.removeEventListener('change', onEffectChange);
 
   setDefaultScale();
   setDefaultEffect();
   submitButton.disabled = false;
   form.reset();
+  pristine.validate();
 }
 
 const openImageEditor = () => {
-  // Отобразим форму редактирования публикации.
   imageEditorDialog.classList.remove('hidden');
-  // Исключим прокрутку позади модального окна.
   pageBody.classList.add('modal-open');
-  // Закрытие формы на крестик.
-  closeButton.addEventListener('click', closeImageEditor);
-  // Закрытие формы на ESC.
-  document.addEventListener('keydown', onDocumentKeydown);
-  // Масштабирование по умолчанию.
   setDefaultScale();
-  // Обработчики масштабирования изображения.
-  increaseScaleElement.addEventListener('click', onIncreaseScaleClick);
-  decreaseScaleElement.addEventListener('click', onDecreaseScaleClick);
-  // Обработчик наложения эффекта на изображение.
+
+  closeButton.addEventListener('click', closeImageEditor);
+  document.addEventListener('keydown', onDocumentKeydown);
+  changeScaleElement.addEventListener('click', onChangeScaleClick);
   effectsElement.addEventListener('change', onEffectChange);
-  // Добавим валидацию перед отправкой формы.
   form.addEventListener('submit', onFormSubmit);
 };
 
