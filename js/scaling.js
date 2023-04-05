@@ -11,22 +11,23 @@ const scaleImage = (percent) => {
   controlValueElement.value = `${percent}%`;
 };
 
-const onIncreaseScaleClick = () => {
+const onChangeScaleClick = (evt) => {
+  if (!evt.target.matches('.scale__control')) {
+    return;
+  }
   const scalePercent = parseInt(controlValueElement.value, 10);
-  let newScalePercent = scalePercent + STEP;
-  newScalePercent = newScalePercent > MAX ? MAX : newScalePercent;
-  scaleImage(newScalePercent);
-};
-
-const onDecreaseScaleClick = () => {
-  const scalePercent = parseInt(controlValueElement.value, 10);
-  let newScalePercent = scalePercent - STEP;
-  newScalePercent = newScalePercent < MIN ? MIN : newScalePercent;
+  let newScalePercent = DEFAULT;
+  if (evt.target.matches('.scale__control--smaller')) {
+    newScalePercent = scalePercent - STEP;
+    newScalePercent = newScalePercent < MIN ? MIN : newScalePercent;
+  } else if (evt.target.matches('.scale__control--bigger')) {
+    newScalePercent = scalePercent + STEP;
+    newScalePercent = newScalePercent > MAX ? MAX : newScalePercent;
+  }
   scaleImage(newScalePercent);
 };
 
 const setDefaultScale = () => scaleImage(DEFAULT);
 
-export {onIncreaseScaleClick};
-export {onDecreaseScaleClick};
+export {onChangeScaleClick};
 export {setDefaultScale};
