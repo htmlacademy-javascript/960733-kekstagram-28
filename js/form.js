@@ -95,14 +95,8 @@ function closeSuccessBlock() {
   sendDataSucessShown = false;
 }
 
-const changeTryAgainButtonAccessibility = (newValue) => {
-  const tryAgainButton = document.querySelector('.error__button');
-  tryAgainButton.disabled = newValue;
-};
-
 const onTryAgainButtonClick = () => {
-  changeTryAgainButtonAccessibility(true);
-  saveNewPost();
+  closeErrorBlock();
 };
 
 const onOkButtonClick = () => {
@@ -111,10 +105,6 @@ const onOkButtonClick = () => {
 };
 
 const showConnectionError = () => {
-  if (connectionErrorShown) {
-    changeTryAgainButtonAccessibility(false);
-    return;
-  }
   connectionErrorShown = true;
   submitButton.disabled = false;
   const errorTemplate = document.querySelector('#error')
